@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blackline</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #050505;
+      --fg: #f2f2f2;
+      --accent: #a855f7;
+      --muted: #b8b8b8;
+      --card: #0f0f0f;
+      --font-heading: "Space Grotesk", sans-serif;
+      --font-body: "Inter", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      cursor: default;
+      scroll-behavior: smooth;
+    }
+
+    /* MOVING VAPORWAVE GRID BACKGROUND */
+    #grid-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 150%;
+      height: 150%;
+      background:
+        linear-gradient(90deg, rgba(255,0,150,0.25) 1px, transparent 1px),
+        linear-gradient(rgba(0,200,255,0.25) 1px, transparent 1px);
+      background-size: 70px 70px;
+      z-index: -1;
+      transition: transform 0.2s ease-out;
+      opacity: 0.4;
+    }
+
+    /* GLOW FOLLOW CURSOR */
+    #cursor-glow {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(168,85,247,0.35), transparent 70%);
+      transform: translate(-50%, -50%);
+      transition: transform 0.12s ease-out;
+      z-index: 1;
+    }
+
+    /* CLICK BURST */
+    .click-burst {
+      position: fixed;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(168, 85, 247, 0.9);
+      pointer-events: none;
+      animation: burst 0.45s ease-out forwards;
+      z-index: 2;
+    }
+
+    @keyframes burst {
+      from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      to { transform: translate(-50%, -50%) scale(5); opacity: 0; }
+    }
+
+    /* NAVBAR */
+    nav {
+      width: 100%;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 50;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    nav a {
+      color: var(--fg);
+      text-decoration: none;
+      font-family: var(--font-heading);
+      letter-spacing: 1px;
+      font-size: 15px;
+      opacity: 0.85;
+      transition: 0.25s;
+    }
+
+    nav a:hover {
+      opacity: 1;
+      color: var(--accent);
+      text-shadow: 0 0 12px var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* INTRO */
+    #intro {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 25px;
+      opacity: 1;
+      transition: opacity 1s ease;
+      text-align: center;
+      position: relative;
+    }
+
+    #intro.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .logo {
+      width: 260px;
+      height: 260px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-image: url("https://cdn.discordapp.com/attachments/1394832647666012260/1496107306302177391/Screenshot_2026-04-21_112546.png");
+      transition: 1.2s ease;
+    }
+
+    .logo.slide-left {
+      transform: translateX(-300px);
+    }
+
+    .intro-text {
+      font-family: var(--font-heading);
+      font-size: 42px;
+      opacity: 0;
+      transition: opacity 1s ease, transform 1s ease;
+      transform: translateX(40px);
+      text-shadow: 0 0 12px rgba(255,255,255,0.2);
+    }
+
+    .intro-text.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* FLOWING BLACKLINE TEXT */
+    #brand-reveal {
+      font-family: var(--font-heading);
+      font-size: 70px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      background: linear-gradient(90deg, #ff00ff, #00eaff, #ff00ff);
+      background-size: 300%;
+      -webkit-background-clip: text;
+      color: transparent;
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 1s ease, transform 1s ease;
+      animation: flow 4s linear infinite;
+      text-shadow: 0 0 25px rgba(255,0,255,0.3);
+    }
+
+    @keyframes flow {
+      0% { background-position: 0%; }
+      100% { background-position: 300%; }
+    }
+
+    #brand-reveal.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* HOME SECTION */
+    #home {
+      opacity: 0;
+      transition: opacity 1s ease;
+      padding-top: 140px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    #home.visible {
+      opacity: 1;
+    }
+
+    h1 {
+      font-family: var(--font-heading);
+      font-size: 56px;
+      margin-bottom: 10px;
+      text-shadow: 0 0 15px rgba(255,255,255,0.15);
+    }
+
+    p {
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.7;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 16px 32px;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-family: var(--font-heading);
+      letter-spacing: 1px;
+      transition: 0.25s;
+      font-size: 18px;
+      box-shadow: 0 0 15px rgba(168,85,247,0.4);
+    }
+
+    .btn:hover {
+      background: #c084fc;
+      box-shadow: 0 0 30px #c084fc;
+      transform: translateY(-4px);
+    }
+
+    /* FAQ */
+    .faq {
+      margin-top: 100px;
+    }
+
+    .faq-item {
+      background: var(--card);
+      padding: 25px;
+      border: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.25s;
+      font-size: 20px;
+    }
+
+    .faq-item:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 25px rgba(168,85,247,0.25);
+      transform: translateY(-2px);
+    }
+
+    .faq-answer {
+      display: none;
+      margin-top: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 18px;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="grid-bg"></div>
+<div id="cursor-glow"></div>
+
+<nav>
+  <a href="#">BLACKLINE</a>
+  <div>
+    <a href="#home" style="margin-right: 20px;">HOME</a>
+    <a href="#faq">FAQ</a>
+  </div>
+</nav>
+
+<div id="intro">
+  <div id="logo" class="logo"></div>
+
+  <div id="text1" class="intro-text">You found Blackline.</div>
+  <div id="text2" class="intro-text">You came here for one thing.</div>
+
+  <div id="brand-reveal">BLACKLINE</div>
+</div>
+
+<div id="home">
+  <h1>Welcome to Blackline</h1>
+  <p>
+    A collective focused on cybersecurity awareness, digital identity, and the culture behind ethical security.
+  </p>
+
+  <a href="#" class="btn">Join Today</a>
+
+  <div id="community" style="margin-top: 40px;">
+    <a href="https://discord.gg/CTyMcgnPCb" class="btn" style="background:#6b21a8;">Join the Community</a>
+  </div>
+
+  <!-- EXPANDED FAQ -->
+  <div class="faq" id="faq">
+    <h2 style="font-family: var(--font-heading); margin-bottom: 25px; font-size: 38px;">Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+      <strong>What is Blackline?</strong>
+      <div class="faq-answer">Blackline is a digital‑security collective focused on awareness, identity, and ethical cybersecurity culture.</div>
+    </div>
+
+    <div class="faq-item">
+      <strong>Is Blackline illegal?</strong>
+      <div class="faq-answer">No. Blackline operates ethically and legally. We do not support or engage in illegal hacking.</div>
+    </div>
+
+    <div class="faq-item">
+      <strong>How do I join?</strong>
+      <div class="faq-answer">Click “Join Today” and complete the form. If you fit the culture, you’ll be accepted.</div>
+    </div>
+
+    <div class="faq-item">
+      <strong>Do I need experience?</strong>
+      <div class="faq-answer">No. Beginners, intermediates, and advanced users are all welcome.</div>
+    </div>
+
+    <div class="faq-item">
+      <strong>Is Blackline free?</strong>
+      <div class="faq-answer">Yes. Blackline is community‑driven and completely free.</div>
+    </div>
+
+    <div class="faq-item">
+      <strong>What does Blackline teach?</strong>
+      <div class="faq-answer">Cybersecurity basics, digital identity, OSINT, privacy, threat awareness, and mindset.</div>
+    </div>
+
+    <div class="faq-item">
+      <strong>Can I become staff?</strong>
+      <div class="faq-answer">Staff roles are earned through trust, consistency, and contribution — never requested.</div>
+    </div>
+
+    <div class="faq-item">
+      <strong>Why was my application denied?</strong>
+      <div class="faq-answer">Usually due to immaturity, incomplete answers, or not fitting the culture. You can reapply later.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* CURSOR GLOW */
+  const glow = document.getElementById("cursor-glow");
+  const grid = document.getElementById("grid-bg");
+
+  document.addEventListener("mousemove", e => {
+    glow.style.left = e.pageX + "px";
+    glow.style.top = e.pageY + "px";
+
+    grid.style.transform = `translate(${e.pageX * -0.02}px, ${e.pageY * -0.02}px)`;
+  });
+
+  document.addEventListener("click", e => {
+    const burst = document.createElement("div");
+    burst.classList.add("click-burst");
+    burst.style.left = e.pageX + "px";
+    burst.style.top = e.pageY + "px";
+    document.body.appendChild(burst);
+    setTimeout(() => burst.remove(), 450);
+  });
+
+  /* INTRO SEQUENCE */
+  setTimeout(() => document.getElementById("text1").classList.add("visible"), 500);
+  setTimeout(() => document.getElementById("text2").classList.add("visible"), 2000);
+  setTimeout(() => document.getElementById("logo").classList.add("slide-left"), 3000);
+  setTimeout(() => document.getElementById("brand-reveal").classList.add("visible"), 3500);
+
+  /* AUTO LOAD HOME */
+  setTimeout(() => {
+    document.getElementById("intro").classList.add("hidden");
+    setTimeout(() => document.getElementById("home").classList.add("visible"), 800);
+  }, 5000);
+
+  /* FAQ */
+  document.querySelectorAll(".faq-item").forEach(item => {
+    item.addEventListener("click", () => item.classList.toggle("open"));
+  });
+</script>
+
+</body>
+</html>
