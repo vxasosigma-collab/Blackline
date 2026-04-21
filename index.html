@@ -24,46 +24,46 @@
       color: var(--fg);
       font-family: var(--font-body);
       overflow-x: hidden;
-      cursor: default;
       scroll-behavior: smooth;
     }
 
-    /* MOVING VAPORWAVE GRID BACKGROUND */
+    /* FIXED GRID */
     #grid-bg {
       position: fixed;
       top: 0;
       left: 0;
-      width: 150%;
-      height: 150%;
+      width: 140%;
+      height: 140%;
       background:
         linear-gradient(90deg, rgba(255,0,150,0.25) 1px, transparent 1px),
         linear-gradient(rgba(0,200,255,0.25) 1px, transparent 1px);
       background-size: 70px 70px;
       z-index: -1;
-      transition: transform 0.2s ease-out;
-      opacity: 0.4;
+      opacity: 0.35;
+      transition: transform 0.15s ease-out;
     }
 
-    /* GLOW FOLLOW CURSOR */
+    /* HARD NEON GLOW FOLLOWER */
     #cursor-glow {
-      width: 120px;
-      height: 120px;
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
       position: fixed;
       pointer-events: none;
-      background: radial-gradient(circle, rgba(168,85,247,0.35), transparent 70%);
+      background: radial-gradient(circle, rgba(168,85,247,0.8), transparent 70%);
       transform: translate(-50%, -50%);
-      transition: transform 0.12s ease-out;
+      transition: transform 0.08s ease-out;
       z-index: 1;
+      filter: blur(18px);
     }
 
     /* CLICK BURST */
     .click-burst {
       position: fixed;
-      width: 30px;
-      height: 30px;
+      width: 25px;
+      height: 25px;
       border-radius: 50%;
-      background: rgba(168, 85, 247, 0.9);
+      background: rgba(168, 85, 247, 1);
       pointer-events: none;
       animation: burst 0.45s ease-out forwards;
       z-index: 2;
@@ -119,6 +119,7 @@
       transition: opacity 1s ease;
       text-align: center;
       position: relative;
+      overflow: hidden;
     }
 
     #intro.hidden {
@@ -292,13 +293,14 @@
     A collective focused on cybersecurity awareness, digital identity, and the culture behind ethical security.
   </p>
 
-  <a href="#" class="btn">Join Today</a>
+  <!-- JOIN TODAY FIXED -->
+  <a href="https://forms.gle/bK4XWTdU6khnq8Rp8" class="btn" target="_blank">Join Today</a>
 
   <div id="community" style="margin-top: 40px;">
-    <a href="https://discord.gg/CTyMcgnPCb" class="btn" style="background:#6b21a8;">Join the Community</a>
+    <a href="https://discord.gg/CTyMcgnPCb" class="btn" style="background:#6b21a8;" target="_blank">Join the Community</a>
   </div>
 
-  <!-- EXPANDED FAQ -->
+  <!-- FAQ -->
   <div class="faq" id="faq">
     <h2 style="font-family: var(--font-heading); margin-bottom: 25px; font-size: 38px;">Frequently Asked Questions</h2>
 
@@ -315,31 +317,6 @@
     <div class="faq-item">
       <strong>How do I join?</strong>
       <div class="faq-answer">Click “Join Today” and complete the form. If you fit the culture, you’ll be accepted.</div>
-    </div>
-
-    <div class="faq-item">
-      <strong>Do I need experience?</strong>
-      <div class="faq-answer">No. Beginners, intermediates, and advanced users are all welcome.</div>
-    </div>
-
-    <div class="faq-item">
-      <strong>Is Blackline free?</strong>
-      <div class="faq-answer">Yes. Blackline is community‑driven and completely free.</div>
-    </div>
-
-    <div class="faq-item">
-      <strong>What does Blackline teach?</strong>
-      <div class="faq-answer">Cybersecurity basics, digital identity, OSINT, privacy, threat awareness, and mindset.</div>
-    </div>
-
-    <div class="faq-item">
-      <strong>Can I become staff?</strong>
-      <div class="faq-answer">Staff roles are earned through trust, consistency, and contribution — never requested.</div>
-    </div>
-
-    <div class="faq-item">
-      <strong>Why was my application denied?</strong>
-      <div class="faq-answer">Usually due to immaturity, incomplete answers, or not fitting the culture. You can reapply later.</div>
     </div>
   </div>
 </div>
@@ -371,10 +348,10 @@
   setTimeout(() => document.getElementById("logo").classList.add("slide-left"), 3000);
   setTimeout(() => document.getElementById("brand-reveal").classList.add("visible"), 3500);
 
-  /* AUTO LOAD HOME */
+  /* REMOVE INTRO COMPLETELY */
   setTimeout(() => {
-    document.getElementById("intro").classList.add("hidden");
-    setTimeout(() => document.getElementById("home").classList.add("visible"), 800);
+    document.getElementById("intro").remove();
+    document.getElementById("home").classList.add("visible");
   }, 5000);
 
   /* FAQ */
